@@ -46,6 +46,45 @@ router.post('/signup', (req, res) => {
 });
 
 
+router.get('/login', (req, res) => {
+  res.render('auth/login')
+});
+
+router.post('/login', (req, res) => {
+  const { username, password } = req.body;
+
+  if(!username || !password) {
+    res.render('auth/login', {
+      errorMessage: "Please enter both username and password"
+    })
+    return;
+  }
+
+  User.findOne({'username': username})
+    .then((user) => {
+      if(!user) {
+          res.render('auth/login', {
+            errorMessage: 'Invalid login'
+          })
+          return;
+      }
+
+      if(bcrypt.compareSync(password, user.password)) {
+        req.session.currentUser = user; 
+        res.redirect('/');
+
+      } else {
+        res.render('auth/login', {
+          errorMessage: 'Invalid Login'
+        });
+      }
+    });
+});
+
+router.post('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
+});
 
 
 module.exports = router;

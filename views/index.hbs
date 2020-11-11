@@ -2,3 +2,17 @@
 <p>Welcome to {{title}}</p>
 
 <a href="./signup"> Sign in here!</a>
+
+
+
+
+{{#if user}}
+  Welcome {{user.username}}
+  <form action="/logout" method="POST">
+<button type="submit"> Logout </button>
+</form>
+<a href="./private"> come to see mama june in private!</a>
+<a href="./main"> come to see mama june and a cat in private!</a>
+{{else}}
+<a href="./login"> Login here</a>
+{{/if}}
